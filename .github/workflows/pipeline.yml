@@ -20,3 +20,17 @@ jobs:
           vid: ${{ secrets.VERACODE_API_ID }}
           vkey: ${{ secrets.VERACODE_API_KEY }}
           file: 'veracode-scan-target.zip'
+  
+  import-issues:
+    needs: static_analysis
+    runs-on: ubuntu-latest
+    steps:
+      - name: get scan results
+        uses: actions/download-artifact@v3
+        with:
+          name: filtered-results
+
+      - name: import flaws as issues
+        uses: veracode/veracode-flaws-to-issues@v2.1.0
+        with:
+          scan-results-json: 'filtered_results.json'
