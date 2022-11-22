@@ -20,6 +20,12 @@ jobs:
           vid: ${{ secrets.VERACODE_API_ID }}
           vkey: ${{ secrets.VERACODE_API_KEY }}
           file: 'veracode-scan-target.zip'
+          
+      - name: save filtered results file
+        uses: actions/upload-artifact@v2
+        with:
+          name: filtered-results
+          path: filtered_results.json
   
   import-issues:
     needs: static_analysis
