@@ -1,0 +1,29 @@
+name: Veracode Static Analysis Demo
+on: workflow_dispatch
+    
+jobs:
+  static_analysis:
+    name: Static Analysis
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Check out main branch
+        uses: actions/checkout@v2
+        
+      - name: Zipping Repo
+        run: zip -r veracode-scan-target.zip ./
+          
+      - name: Veracode Upload And Scan
+        uses: veracode/veracode-uploadandscan-action@0.2.4
+        with:
+          appname: 'juice-shop'
+          createprofile: false
+          filepath: 'veracode-scan-target.zip'
+          vid: '${{ secrets.API_ID }}'
+          vkey: '${{ secrets.API_KEY }}'
+          createsandbox: 'true'
+          sandboxname: 'github-sandbox'
+#          scantimeout: 0
+#          exclude: '*.js'
+#          include: '*.war'
+#          criticality: 'VeryHigh'
