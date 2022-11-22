@@ -1,0 +1,22 @@
+name: Veracode Pipeline Scan
+on: workflow_dispatch
+    
+jobs:
+  static_analysis:
+    name: Pipeline Scan
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Check out main branch
+        uses: actions/checkout@v2
+        
+      - name: Zipping Repo
+        run: zip -r veracode-scan-target.zip ./
+                    
+      - name: pipeline-scan action step
+        id: pipeline-scan
+        uses: veracode/Veracode-pipeline-scan-action@latest
+        with:
+          vid: ${{ secrets.VERACODE_API_ID }}
+          vkey: ${{ secrets.VERACODE_API_KEY }}
+          file: 'veracode-scan-target.zip'
